@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Uçak Arama";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/FlightStyle.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>hemenbilet</h1>
+            <div class="header-links">
+                <a href="/Contact">İletişim</a>
+                <a href="/Account/Login">Giriş Yap</a> <!-- Giriş Yap Butonu -->
+            </div>
+        </div>
+    </header>
+
+
+    <main>
+        <div class="search-container">
+            <h2>UÇAK BİLETİ ARA</h2>
+            <form id="flightSearchForm">
+                <!-- Nereden ve Nereye -->
+                <div class="form-row">
+                    <label for="from">Nereden</label>
+                    <input type="text" id="from" name="from" placeholder="Şehir veya Havalimanı" list="popular-locations" required>
+                    <span id="swapIcon" class="swap-icon">⇄</span>
+                    <label for="to">Nereye</label>
+                    <input type="text" id="to" name="to" placeholder="Şehir veya Havalimanı" list="popular-locations" required>
+                </div>
+                <datalist id="popular-locations">
+                    <option value="New York (JFK)">
+                    <option value="İstanbul (IST)">
+                    <option value="Amsterdam (AMS)">
+                    <option value="Tokyo (NRT)">
+                </datalist>
+
+                <!-- Yolcu Sayısı -->
+                <div class="form-row">
+                    <label for="adultCount">Yetişkin</label>
+                    <input type="number" id="adultCount" name="adultCount" min="1" max="10" value="1" required>
+
+                    <label for="childCount">Çocuk</label>
+                    <input type="number" id="childCount" name="childCount" min="0" max="10" value="0">
+                </div>
+
+                <!-- Tek Yön / Gidiş-Dönüş -->
+                <div class="form-row">
+                    <label>
+                        <input type="radio" name="tripType" value="one-way" checked> Tek Yön
+                    </label>
+                    <label>
+                        <input type="radio" name="tripType" value="round-trip"> Gidiş-Dönüş
+                    </label>
+                </div>
+
+                <!-- Tarih Seçimi -->
+                <div class="form-row">
+                    <div>
+                        <label for="departureDate">Gidiş Tarihi</label>
+                        <input type="date" id="departureDate" name="departureDate" required>
+                    </div>
+                    <div id="returnDateContainer" style="display: none;">
+                        <label for="returnDate">Dönüş Tarihi</label>
+                        <input type="date" id="returnDate" name="returnDate">
+                    </div>
+                </div>
+
+                <!-- Bilet Ara Butonu -->
+                <div class="form-row">
+                    <button type="submit" class="btn-primary">Bilet Ara</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Popüler Destinasyonlar -->
+        <section class="popular-destinations">
+            <h2>POPÜLER DESTİNASYONLAR</h2>
+            <div class="destination-list">
+                <div class="destination-item">
+                    <img src="/Content/images/newyork.jpg" alt="New York">
+                    <div class="destination-overlay">NEW YORK</div>
+                </div>
+                <div class="destination-item">
+                    <img src="/Content/images/istanbul.jpg" alt="İstanbul">
+                    <div class="destination-overlay">İSTANBUL</div>
+                </div>
+                <div class="destination-item">
+                    <img src="/Content/images/amsterdam.jpg" alt="Amsterdam">
+                    <div class="destination-overlay">AMSTERDAM</div>
+                </div>
+                <div class="destination-item">
+                    <img src="/Content/images/tokyo.jpg" alt="Tokyo">
+                    <div class="destination-overlay">TOKYO</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="~/Scripts/FlightScript.js"></script>
+</body>
+</html>
