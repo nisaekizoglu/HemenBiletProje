@@ -1,0 +1,34 @@
+﻿@model HemenBiletProje.Entities.LoginUser
+
+@{
+    ViewBag.Title = "Login";
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/dist/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<div class="container" style="width: 50%; margin-top: 100px;">
+    <h2 style="text-align: center; color: #5a5a5a;">Giriş Yap</h2>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="UserName" class="control-label">Kullanıcı Adı</label>
+            <input asp-for="UserName" class="form-control" />
+            <div asp-validation-for="UserName" class="text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="control-label">Şifre</label>
+            <input type="password" asp-for="Password" class="form-control" />
+            <div asp-validation-for="Password" class="text-danger"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Giriş Yap</button>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <a href="/User/Register" style="color: #5a5a5a;">Hesabınız yok mu? Kayıt olun.</a>
+        </div>
+    </form>
+</div>

@@ -1,5 +1,5 @@
 ﻿using HemenBiletProje.Repositories;
-using HemenBiletProje.Models;
+using HemenBiletProje.Entities;
 using System.Threading.Tasks;
 
 namespace HemenBiletProje.Services

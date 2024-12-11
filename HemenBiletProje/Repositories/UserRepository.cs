@@ -1,6 +1,6 @@
-﻿using HemenBiletProje.Models;
-using System.Threading.Tasks;
+﻿using HemenBiletProje.Entities;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace HemenBiletProje.Repositories
 {
@@ -26,7 +26,7 @@ namespace HemenBiletProje.Repositories
                     reader.Read();
                     return new User
                     {
-                        UserId = reader.GetInt32(reader.GetOrdinal("Id")),
+                        UserId = reader.GetInt32(reader.GetOrdinal("UserId")), // Kullanıcı ID'si doğru alındı
                         UserName = reader.GetString(reader.GetOrdinal("UserName")),
                         Password = reader.GetString(reader.GetOrdinal("Password"))
                     };
@@ -41,11 +41,11 @@ namespace HemenBiletProje.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var query = "INSERT INTO Users (UserName, Password) VALUES (@UserName, @Password)";
+                var query = "INSERT INTO Users (UserName, Password, Email, Phone) VALUES (@UserName, @Password, @Email, @Phone)";
                 var command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserName", user.UserName);
-                command.Parameters.AddWithValue("@Password", user.Password);
-                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@Password", user.Password); 
+                command.Parameters.AddWithValue("@Email", user.Email); 
                 command.Parameters.AddWithValue("@Phone", user.Phone);
 
                 await connection.OpenAsync();
@@ -54,5 +54,6 @@ namespace HemenBiletProje.Repositories
                 return result > 0;
             }
         }
+
     }
 }

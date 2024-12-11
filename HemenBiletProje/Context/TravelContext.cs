@@ -1,5 +1,4 @@
-﻿using HemenBiletProje.Models;
-using HemenBiletProje.Entities;
+﻿using HemenBiletProje.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

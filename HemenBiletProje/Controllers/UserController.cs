@@ -1,10 +1,10 @@
-﻿using HemenBiletProje.Models;
+﻿using HemenBiletProje.Entities;
 using HemenBiletProje.Services;
 using HemenBiletProje.Repositories;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using HemenBiletProje.Models;
+using HemenBiletProje.Entities;
 
 namespace HemenBiletProje.Controllers
 {
