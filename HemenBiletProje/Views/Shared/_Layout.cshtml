@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - HemenBilet Projesi</title>
+    <title>@ViewBag.Title - HemenBilet </title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -24,8 +24,8 @@
                     @* Giriş ve Kayıt Linkleri *@
                     @if (Session["UserId"] == null)
                     {
-                        <li>@Html.ActionLink("Giriş Yap", "Login", "User", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Kayıt Ol", "Signup", "User", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Giriş Yap", "Login", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Kayıt Ol", "Signup", "Register", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                     else
                     {

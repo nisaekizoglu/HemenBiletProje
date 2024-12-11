@@ -26,13 +26,6 @@ namespace HemenBiletProje.Controllers
 
             return View();
         }
-        public ActionResult Login()
-        {
-            return View();
-        }
-        public ActionResult SignUp()
-        {
-            return View();
-        }
+        
     }
 }

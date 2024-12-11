@@ -14,21 +14,21 @@
     <h2 style="text-align: center; color: #5a5a5a;">Giriş Yap</h2>
     <form method="post">
         <div class="form-group">
-            <label asp-for="UserName" class="control-label">Kullanıcı Adı</label>
-            <input asp-for="UserName" class="form-control" />
-            <div asp-validation-for="UserName" class="text-danger"></div>
+            <label for="UserName" class="control-label">Kullanıcı Adı</label>
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "UserName" })
+            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
-            <label asp-for="Password" class="control-label">Şifre</label>
-            <input type="password" asp-for="Password" class="form-control" />
-            <div asp-validation-for="Password" class="text-danger"></div>
+            <label for="Password" class="control-label">Şifre</label>
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "Password" })
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Giriş Yap</button>
 
         <div style="text-align: center; margin-top: 10px;">
-            <a href="/User/Register" style="color: #5a5a5a;">Hesabınız yok mu? Kayıt olun.</a>
+            <a href="@Url.Action("SignUp", "Register")" style="color: #5a5a5a;">Hesabınız yok mu? Kayıt olun.</a>
         </div>
     </form>
 </div>
