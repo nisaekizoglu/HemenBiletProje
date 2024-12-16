@@ -1,0 +1,26 @@
+body {
+    background: linear-gradient(135deg, #f9d29d, #f68e56);
+    font-family: "Consolas", monospace;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+h2 {
+    color: #f68e56;
+}
+
+.form-control {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.btn-primary {
+    background-color: #f68e56;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #f45d2d;
+    }

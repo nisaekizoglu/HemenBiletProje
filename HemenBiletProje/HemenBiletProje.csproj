@@ -136,12 +136,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminLayoutController.cs" />
+    <Content Include="Content\FlightListPageStyle.css" />
     <Content Include="Content\FlightStyle.css" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\FlightController.cs" />
     <Compile Include="Context\TravelContext.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\FlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegisterContoller.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\LoginUser.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Models\FlightInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\UserService.cs" />
@@ -180,6 +183,7 @@
     <Content Include="Content\images\istanbul.jpg" />
     <Content Include="Content\images\newyork.jpg" />
     <Content Include="Content\images\tokyo.jpg" />
+    <Content Include="Content\PaymentStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -617,6 +621,7 @@
     <Content Include="kaiadmin-lite-1.2.0\LICENSE" />
     <Content Include="kaiadmin-lite-1.2.0\README.md" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
+    <Content Include="Scripts\FlightListPageScript.js" />
     <Content Include="Scripts\FlightScript.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -653,13 +658,14 @@
     <Content Include="Views\AdminLayout\PartialScript.cshtml" />
     <Content Include="Views\AdminLayout\PartialSideBar.cshtml" />
     <Content Include="Views\Category\CategoryList.cshtml" />
+    <Content Include="Views\Flight\FlightListPage.cshtml" />
+    <Content Include="Views\Flight\Payment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\AdminLayout\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

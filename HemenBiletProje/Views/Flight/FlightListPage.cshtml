@@ -1,0 +1,193 @@
+﻿@model List<HemenBiletProje.Models.FlightInfo>
+
+@{
+    ViewBag.Title = "Uçuş Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/FlightListPageStyle.css">
+    <style>
+        /* Genel Ayarlar */
+        body {
+            font-family: "Consolas", monospace;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f9d29d, #f68e56);
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #f68e56;
+            padding: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 24px;
+                color: #fff;
+            }
+
+        .header-links a {
+            margin-left: 15px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+            .header-links a:hover {
+                text-decoration: underline;
+            }
+
+        /* Ana İçerik */
+        .flight-list-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        /* Filtre Bölümü */
+        .filter-section {
+            width: 25%;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-family: Consolas;
+        }
+
+            .filter-section h2 {
+                color: #f68e56;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+        .filter-item {
+            margin-bottom: 10px;
+        }
+
+        /* Uçuş Listesi */
+        .flight-list-section {
+            width: 70%;
+        }
+
+        .flight-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .flight-item p {
+                margin: 0;
+                font-size: 14px;
+            }
+
+            .flight-item .flight-price {
+                color: #f68e56;
+                font-weight: bold;
+            }
+
+        .btn-primary {
+            background-color: #f68e56;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+            .btn-primary:hover {
+                background-color: #f45d2d;
+            }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>hemenbilet</h1>
+            <div class="header-links">
+                <a href="@Url.Action("FlightSearchPage", "Flight")">Ana Sayfa</a>
+                <a href="@Url.Action("Contact", "Home")">İletişim</a>
+                <a href="@Url.Action("Login", "Account")">Çıkış Yap</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana İçerik -->
+    <main class="flight-list-container">
+        <!-- Filtre Bölümü -->
+        <aside class="filter-section">
+            <h2>Filtreler</h2>
+            <div class="filter-item">
+                <label>
+                    <input type="checkbox" name="filter" value="direct-flights">
+                    Sadece Direkt Uçuşlar
+                </label>
+            </div>
+            <div class="filter-item">
+                <label>
+                    <input type="checkbox" name="filter" value="all-flights">
+                    Tüm Uçuşlar
+                </label>
+            </div>
+            <div class="filter-item">
+                <label>
+                    <input type="checkbox" name="filter" value="morning-flights">
+                    Sabah Uçuşları
+                </label>
+            </div>
+            <div class="filter-item">
+                <label>
+                    <input type="checkbox" name="filter" value="evening-flights">
+                    Akşam Uçuşları
+                </label>
+            </div>
+        </aside>
+
+        <!-- Uçuş Listesi -->
+        <section class="flight-list-section">
+            <h2 style="text-align: center; color: #f68e56;">Uçuş Listesi</h2>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var flight in Model)
+                {
+                    <div class="flight-item">
+                        <div>
+                            <p><strong>Nereden:</strong> @flight.From</p>
+                            <p><strong>Nereye:</strong> @flight.To</p>
+                            <p><strong>Havayolu:</strong> @flight.Airline</p>
+                            <p class="flight-price">Fiyat: @flight.Price ₺</p>
+                        </div>
+                        <div>
+                            <a href="@Url.Action("Payment", "Flight", new { from = flight.From, to = flight.To, price = flight.Price, flightTime = flight.FlightTime })" class="btn-primary">
+                                Bilet Al
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="text-align: center; color: #666;">Uçuş bulunamadı.</p>
+            }
+        </section>
+    </main>
+</body>
+</html>
