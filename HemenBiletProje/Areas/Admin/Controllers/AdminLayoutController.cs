@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace HemenBiletProje.Areas.Admin.Controllers
 {
@@ -17,11 +13,21 @@ namespace HemenBiletProje.Areas.Admin.Controllers
         {
             return PartialView();
         }
+
         public PartialViewResult PartialSideBar()
         {
             return PartialView();
         }
+
         public PartialViewResult PartialNavbar()
+        {
+            return PartialView();
+        }
+        public PartialViewResult PartialFooter()
+        {
+            return PartialView();
+        }
+        public PartialViewResult PartialScript()
         {
             return PartialView();
         }
