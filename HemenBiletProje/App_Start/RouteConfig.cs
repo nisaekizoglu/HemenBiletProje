@@ -19,7 +19,7 @@ namespace HemenBiletProje
 
        name: "FlightRoute",
        url: "{controller}/{action}/{id}",
-       defaults: new { controller = "Flight", action = "Index", id = UrlParameter.Optional },
+       defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
        namespaces: new[] { "HemenBiletProje.Controllers" } // Hangi namespace kullanılacaksa onu ekleyin
    );
 

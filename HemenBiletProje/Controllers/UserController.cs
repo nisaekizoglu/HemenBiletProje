@@ -1,80 +1,65 @@
-﻿using HemenBiletProje.Entities;
-using HemenBiletProje.Services;
-using HemenBiletProje.Repositories;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.UI.WebControls;
+﻿using HemenBiletProje.Context;
 using HemenBiletProje.Entities;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web.Mvc;
+using System.Web.Security;
+using System.Web.UI.WebControls;
 
 namespace HemenBiletProje.Controllers
 {
-    public class UserController : Controller
+    public class LoginController : Controller
     {
-        private readonly UserRepository _userRepository = new UserRepository();
-        private readonly UserService _userService;
+        TravelContext context = new TravelContext();
 
-        public UserController()
-        {
-            _userService = new UserService(_userRepository);
-        }
-
-        // Login sayfasına yönlendirir
-        [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
-        // Login işlemi
         [HttpPost]
-        public async Task<ActionResult> Login(LoginUser user)
+        public ActionResult Login(LoginUser user)
         {
-            if (ModelState.IsValid)
+            var existingUser = context.Users.FirstOrDefault(x => x.UserName == user.UserName);
+
+            if (existingUser != null && VerifyPassword(user.Password, existingUser.Password))
             {
-                var existingUser = await _userService.LoginUserAsync(user.UserName, user.Password);
-                if (existingUser != null)
-                {
-                    Session["UserId"] = existingUser.UserId.ToString();
-                    return RedirectToAction("Index", "Home");
-                }
+                // Oturum aç
+                FormsAuthentication.SetAuthCookie(existingUser.UserName, false);
+                Session["UserName"] = existingUser.UserName;
 
-                ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
+                return RedirectToAction("Index", "Home");
             }
-
-            return View(user);
-        }
-
-        // Signup sayfasına yönlendirir
-        [HttpGet]
-        public ActionResult Signup()
-        {
-            return View();
-        }
-
-        // Kullanıcı kaydetme işlemi
-        [HttpPost]
-        public async Task<ActionResult> Signup(User user)
-        {
-            if (ModelState.IsValid)
+            else
             {
-                var isRegistered = await _userService.RegisterUserAsync(user);
-                if (isRegistered)
-                {
-                    return RedirectToAction("Login");
-                }
-
-                ModelState.AddModelError("", "Bu kullanıcı adı zaten kullanılıyor.");
+                ViewBag.ErrorMessage = "Kullanıcı adı veya şifre hatalı!";
+                return View();
             }
-
-            return View(user);
         }
 
-        // Kullanıcı çıkış işlemi (Logout)
-        [HttpGet]
+        // Şifre doğrulama (Hash'lenmiş şifre ile karşılaştırma)
+        private bool VerifyPassword(string inputPassword, string storedHash)
+        {
+            var hashedInputPassword = HashPassword(inputPassword);
+            return hashedInputPassword == storedHash;
+        }
+
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
+        }
+
         public ActionResult Logout()
         {
+            FormsAuthentication.SignOut();
             Session.Clear();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Login");
         }
     }
 }
