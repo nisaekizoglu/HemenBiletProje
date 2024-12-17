@@ -145,7 +145,7 @@
     <Compile Include="Controllers\FlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegisterContoller.cs" />
-    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Entities\Admin.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Contact.cs" />
