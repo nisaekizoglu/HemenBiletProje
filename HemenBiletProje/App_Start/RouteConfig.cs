@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace HemenBiletProje
@@ -14,22 +10,26 @@ namespace HemenBiletProje
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+            name: "AdminPanel", // Benzersiz bir isim verin
+            url: "admin/{action}/{id}",
+            defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional }
+            );
 
 
+            routes.MapRoute(
+                name: "FlightRoute",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Flight", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "HemenBiletProje.Controllers" }
+            );
 
-       name: "FlightRoute",
-       url: "{controller}/{action}/{id}",
-       defaults: new { controller = "Flight", action = "Index", id = UrlParameter.Optional },
-       namespaces: new[] { "HemenBiletProje.Controllers" } // Hangi namespace kullanılacaksa onu ekleyin
-   );
-
-            // Varsayılan Route
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
                 namespaces: new[] { "HemenBiletProje.Controllers" }
             );
+
         }
     }
 }

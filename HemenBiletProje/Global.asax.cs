@@ -32,8 +32,7 @@ namespace HemenBiletProje
 
         // Servisleri burada kaydediyoruz
         private void RegisterServices(IKernel kernel)
-        {
-            // UserRepository ve UserService'i DI container'a bağlıyoruz
+        { 
             kernel.Bind<UserRepository>().ToSelf().InRequestScope();
             kernel.Bind<UserService>().ToSelf().InRequestScope();
         }

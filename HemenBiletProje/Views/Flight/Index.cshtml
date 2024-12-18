@@ -1,0 +1,35 @@
+@model List<HemenBiletProje.Controllers.Flight>
+
+<h2>Uçuþ Verileri</h2>
+<p>@ViewBag.Message</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Uçuþ Tarihi</th>
+            <th>Durum</th>
+            <th>Havaalaný</th>
+            <th>Planlanan Saat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var flight in Model)
+            {
+                <tr>
+                    <td>@(flight.FlightDate ?? "Bilgi Yok")</td>
+                    <td>@(flight.FlightStatus ?? "Bilgi Yok")</td>
+                    <td>@(flight.Departure?.Airport ?? "Bilgi Yok")</td>
+                    <td>@(flight.Departure?.Scheduled ?? "Bilgi Yok")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">Veri bulunamadý.</td>
+            </tr>
+        }
+    </tbody>
+</table>

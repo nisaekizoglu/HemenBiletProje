@@ -1,60 +1,108 @@
-ï»¿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using HemenBiletProje.Models;
+using Newtonsoft.Json;
 
 namespace HemenBiletProje.Controllers
 {
     public class FlightController : Controller
     {
-        // UÃ§uÅŸ listeleme sayfasÄ±
-        public ActionResult FlightList()
-        {
-            var flights = new List<FlightInfo>
-    {
-        new FlightInfo { From = "Ä°stanbul", To = "New York", Price = 5000, FlightTime = "10:00 - 18:00", Airline = "Turkish Airlines" },
-        new FlightInfo { From = "Ä°stanbul", To = "Amsterdam", Price = 3500, FlightTime = "12:00 - 15:00", Airline = "Pegasus Airlines" },
-        new FlightInfo { From = "Antalya", To = "Trabzon", Price = 2500, FlightTime = "14:00 - 16:00", Airline = "SunExpress" }
-    };
+        // API URL ve Anahtar
+        private readonly string _apiUrl = "https://api.aviationstack.com/v1/flights";
+        private readonly string _apiKey = "b42cedd7ea1352bf8982debd17f3a1cc";
 
-            return View("FlightListPage",flights);
+        // Veritabaný baðlantý dizesi
+        private readonly string _connectionString = "Server=GULSEN;Database=Flights;Trusted_Connection=True;";
+
+        // Index Action: API'den veri çekip veritabanýna kaydeder ve görüntüler
+        public async Task<ActionResult> Index()
+        {
+            var flights = await GetFlightDataAsync(); // API'den veri çek
+            int rowsInserted = SaveFlightsToDatabase(flights); // Veritabanýna kaydet
+
+            ViewBag.Message = $"{rowsInserted} adet uçuþ verisi baþarýyla kaydedildi.";
+            return View(flights); // Veriyi View'a gönder
         }
 
-        // Ã–deme sayfasÄ±nÄ± dÃ¶ndÃ¼ren Action
-        public ActionResult Payment(string from, string to, decimal? price, string flightTime)
+        // API'den Veri Çekme Metodu
+        private async Task<List<Flight>> GetFlightDataAsync()
         {
-
-            if (price == null)
+            using (HttpClient client = new HttpClient())
             {
-                // EÄŸer fiyat null ise kullanÄ±cÄ±yÄ± uÃ§uÅŸ listesine yÃ¶nlendir
-                return RedirectToAction("FlightList");
+                string requestUrl = $"{_apiUrl}?access_key={_apiKey}";
+                HttpResponseMessage response = await client.GetAsync(requestUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    return apiResponse?.Data;
+                }
+                return null;
             }
-            var flightInfo = new FlightInfo
+        }
+
+        // Veriyi Veritabanýna Kaydetme Metodu
+        private int SaveFlightsToDatabase(List<Flight> flights)
+        {
+            int rowsInserted = 0;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                From = from,
-                To = to,
-                Price = price.Value,
-                FlightTime = flightTime
-            };
-            return View(flightInfo);
-        }
+                connection.Open();
 
-        public ActionResult FlightSearchPage()
-        {
-            return View();
-        }
+                foreach (var flight in flights)
+                {
+                    // Scheduled tarihini dönüþtür
+                    DateTime scheduledDate;
+                    object scheduledValue = DateTime.TryParse(flight.Departure?.Scheduled, out scheduledDate)
+                        ? (object)scheduledDate
+                        : DBNull.Value;
 
-        // Ã–deme iÅŸlemini iÅŸleyen Action
-        [HttpPost]
-        public ActionResult ProcessPayment(string CardHolder, string CardNumber, string ExpiryDate, string CVV)
-        {
-            ViewBag.Message = "Ã–deme iÅŸlemi baÅŸarÄ±yla tamamlandÄ±!";
-            return View("Payment");
-        }
+                    var command = new SqlCommand(
+                        "INSERT INTO FlightInfoes (FlightDate, FlightStatus, Airport, Scheduled) " +
+                        "VALUES (@FlightDate, @FlightStatus, @Airport, @Scheduled)", connection);
 
-        // Ä°ÅŸlemi iptal etme
-        public ActionResult CancelPayment()
-        {
-            return RedirectToAction("FlightList");
+                    command.Parameters.AddWithValue("@FlightDate", flight.FlightDate ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@FlightStatus", flight.FlightStatus ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Airport", flight.Departure?.Airport ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Scheduled", scheduledValue);
+
+                    rowsInserted += command.ExecuteNonQuery();
+                }
+            }
+            return rowsInserted;
         }
+    }
+
+    // JSON Model Sýnýflarý
+    public class ApiResponse
+    {
+        [JsonProperty("data")]
+        public List<Flight> Data { get; set; }
+    }
+
+    public class Flight
+    {
+        [JsonProperty("flight_date")]
+        public string FlightDate { get; set; }
+
+        [JsonProperty("flight_status")]
+        public string FlightStatus { get; set; }
+
+        [JsonProperty("departure")]
+        public DepartureInfo Departure { get; set; }
+    }
+
+    public class DepartureInfo
+    {
+        [JsonProperty("airport")]
+        public string Airport { get; set; }
+
+        [JsonProperty("scheduled")]
+        public string Scheduled { get; set; }
     }
 }
