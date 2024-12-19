@@ -7,7 +7,7 @@ namespace HemenBiletProje.Controllers
     public class FlightController : Controller
     {
         // Uçuş listeleme sayfası
-        public ActionResult FlightList()
+        public ActionResult FlightListPage()
         {
             var flights = new List<FlightInfo>
     {
@@ -26,7 +26,7 @@ namespace HemenBiletProje.Controllers
             if (price == null)
             {
                 // Eğer fiyat null ise kullanıcıyı uçuş listesine yönlendir
-                return RedirectToAction("FlightList");
+                return RedirectToAction("FlightListPage");
             }
             var flightInfo = new FlightInfo
             {

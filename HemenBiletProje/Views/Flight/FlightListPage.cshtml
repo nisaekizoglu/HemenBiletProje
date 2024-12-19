@@ -125,7 +125,7 @@
             <div class="header-links">
                 <a href="@Url.Action("FlightSearchPage", "Flight")">Ana Sayfa</a>
                 <a href="@Url.Action("Contact", "Home")">İletişim</a>
-                <a href="@Url.Action("Login", "Account")">Çıkış Yap</a>
+                <a href="@Url.Action("Login", "Login")">Çıkış Yap</a>
             </div>
         </div>
     </header>
@@ -176,7 +176,7 @@
                             <p class="flight-price">Fiyat: @flight.Price ₺</p>
                         </div>
                         <div>
-                            <a href="@Url.Action("Payment", "Flight", new { from = flight.From, to = flight.To, price = flight.Price, flightTime = flight.FlightTime })" class="btn-primary">
+                            <a href="@Url.Action("SeatSelection", "Seat", new { from = flight.From, to = flight.To, price = flight.Price, flightTime = flight.FlightTime })" class="btn-primary">
                                 Bilet Al
                             </a>
                         </div>

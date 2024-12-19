@@ -136,6 +136,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminLayoutController.cs" />
+    <Compile Include="Repositories\ISeatRepository.cs" />
+    <Compile Include="Repositories\SeatRepository.cs" />
+    <Compile Include="Services\ISeatService.cs" />
+    <Compile Include="Services\SeatService.cs" />
     <Content Include="Content\FlightListPageStyle.css" />
     <Content Include="Content\FlightStyle.css" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
@@ -146,10 +150,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegisterContoller.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SeatController.cs" />
     <Compile Include="Entities\Admin.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Contact.cs" />
     <Compile Include="Entities\Destination.cs" />
+    <Compile Include="Entities\Seat.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -657,6 +663,7 @@
     <Content Include="Views\Flight\FlightListPage.cshtml" />
     <Content Include="Views\Flight\Payment.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Seat\SeatSelection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

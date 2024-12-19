@@ -5,12 +5,13 @@ namespace HemenBiletProje.App_Start
 {
     using System;
     using System.Web;
-
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
     using Ninject;
     using Ninject.Web.Common;
     using Ninject.Web.Common.WebHost;
+    using HemenBiletProje.Repositories;
+    using HemenBiletProje.Context;
+    using HemenBiletProje.Services;
 
     public static class NinjectWebCommon 
     {
@@ -19,12 +20,21 @@ namespace HemenBiletProje.App_Start
         /// <summary>
         /// Starts the application.
         /// </summary>
-        public static void Start() 
+        public static void Start()
         {
+            // Ninject modüllerini yükler
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
-            bootstrapper.Initialize(CreateKernel);
+
+            // Kernel'i başlatır ve servisi oluşturur
+            bootstrapper.Initialize(() =>
+            {
+                var kernel = CreateKernel();
+
+                return kernel;
+            });
         }
+
 
         /// <summary>
         /// Stops the application.
@@ -45,6 +55,7 @@ namespace HemenBiletProje.App_Start
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+
                 RegisterServices(kernel);
                 return kernel;
             }
@@ -55,12 +66,16 @@ namespace HemenBiletProje.App_Start
             }
         }
 
+
         /// <summary>
         /// Load your modules or register your services here!
         /// </summary>
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<TravelContext>().ToSelf().InRequestScope();
+            kernel.Bind<ISeatRepository>().To<SeatRepository>();
+            kernel.Bind<SeatService>().ToSelf().InRequestScope(); // Tek bir SeatService bağlaması
         }
     }
 }

@@ -11,53 +11,87 @@ namespace HemenBiletProje.Controllers
 {
     public class RegisterController : Controller
     {
-        TravelContext context = new TravelContext();
+        private readonly TravelContext context;
 
-        // Kayýt formunu göstermek için
+        public RegisterController()
+        {
+            context = new TravelContext();
+        }
+
+        // KayÄ±t formunu gÃ¶stermek iÃ§in
         public ActionResult SignUp()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignUp(User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+
             try
             {
-                // Kullanýcý adý kontrolü
+                // KullanÄ±cÄ± adÄ± kontrolÃ¼
                 var existingUser = context.Users.FirstOrDefault(x => x.UserName == user.UserName);
                 if (existingUser != null)
                 {
-                    ViewBag.ErrorMessage = "Bu kullanýcý adý zaten kayýtlý!";
-                    return View();
+                    ModelState.AddModelError("UserName", "Bu kullanÄ±cÄ± adÄ± zaten kayÄ±tlÄ±!");
+                    return View(user);
                 }
 
-                // Þifreyi hash'le
+                // Åžifreyi hash'le
                 user.Password = HashPassword(user.Password);
 
-                // Kullanýcýyý kaydet
-                context.Users.Add(user);
-                context.SaveChanges();
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        // KullanÄ±cÄ±yÄ± kaydet
+                        context.Users.Add(user);
+                        context.SaveChanges();
+                        transaction.Commit();
 
-                ViewBag.SuccessMessage = "Kayýt baþarýyla tamamlandý!";
-                return RedirectToAction("Login", "Login");
+                        TempData["SuccessMessage"] = "KayÄ±t baÅŸarÄ±yla tamamlandÄ±!";
+                        return RedirectToAction("Login", "Login");
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
             catch (Exception ex)
             {
-                // Hata meydana geldiðinde kullanýcýya mesaj göster
-                ViewBag.ErrorMessage = "Kayýt sýrasýnda bir hata oluþtu: " + ex.Message;
-                return View();
+                ModelState.AddModelError("", "KayÄ±t sÄ±rasÄ±nda bir hata oluÅŸtu: " + ex.Message);
+                return View(user);
             }
         }
 
-        // Þifreyi SHA256 ile hash'lemek için
+        // Åžifreyi SHA256 ile hash'lemek iÃ§in
         private string HashPassword(string password)
         {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
+
             using (var sha256 = SHA256.Create())
             {
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                context.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
